@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="./output.css" rel="stylesheet">
+</head>
+
+<body>
+    <h1 class="text-center underline my-10">Encryption and Decryption with RSA Algorithm</h1>
+    <div class="container mx-auto flex justify-center p-5 ">
+        <div class="w-full p-10">
+            <button type="button"
+                class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 h-10"
+                onclick="generateKeys()">Generate Keys</button>
+            <div class="">
+                <div class="w-auto shadow-lg rounded  p-3 mr-3">
+                    <h2 class="underline">Public Key</h2>
+                    <div class="w-full h-80">
+                        <p id="publicKey"></p>
+                    </div>
+                </div>
+                <div class="w-auto overflow-y-scroll shadow-lg rounded border p-3 mt-5">
+                    <h2 class="underline">Private Key</h2>
+                    <div class="w-full h-80">
+                        <p id="privateKey"></p>
+                    </div>
+                </div>
+                <div class="w-3/4 p-3 mt-5">
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="container mx-auto justify-center p-10">
+        <div class="">
+            <form action="" class="">
+                <label class="block" for="inputText">Enter Text</label>
+                <textarea name="inputText" id="inputText" cols="30" rows="3"
+                    class="border border-slate-950 rounded"></textarea>
+                <br>
+                <button type="button"
+                    class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 h-10"
+                    onclick="post()">Submit</button>
+            </form>
+        </div>
+        <button type="button"
+            class="mt-10 py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 h-10"
+            onclick="Encryption()">Encrypt</button>
+        <div class="">
+            <div class="w-3/4 shadow-lg rounded  p-3 mr-3">
+                <h2 class="underline">Encrypted Data</h2>
+                <div class="w-full min-h-80 h-auto overflow-x-scroll">
+                    <p id="encryptedData"></p>
+                </div>
+            </div>
+        </div>
+        <button type="button"
+            class="mt-10 py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 h-10"
+            onclick="Decryption()">Decrypt</button>
+        <div class="">
+            <div class="w-3/4 shadow-lg rounded  p-3 mr-3">
+                <h2 class="underline">Decrypted Data</h2>
+                <div class="w-full min-h-80 h-auto overflow-x-scroll">
+                    <p id="decryptedData"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <script type="text/javascript" src="./hybrid-crypto.min.js"></script>
+    <script>
+        // Basic initialization
+        // var crypt = new Crypt();
+        // var rsa = new RSA();
+
+        // Generate pair keys 
+        var publicKey;
+        var privateKey;
+        var encrypted;
+        var decrypted;
+        var message = null;
+
+        // let setPublicKey = document.getElementById('publicKey').textContent;
+        // console.log(setPublicKey);
+
+        let post = () => {
+            message = document.getElementById('inputText').value;
+            setTimeout(() => {
+                console.log('Done');
+            }, 2000)
+        }
+
+        // generateKeys();
+        function generateKeys() {
+            var rsa = new RSA();
+            rsa.generateKeyPair(function (keyPair) {
+                publicKey = keyPair.publicKey;
+                privateKey = keyPair.privateKey;
+            });
+            // setTimeout(function () {
+            //     console.log('publicKey', publicKey);
+            //     console.log('privateKey', privateKey);
+            // }, 3000);
+            setTimeout(() => {
+                document.getElementById('publicKey').innerHTML = publicKey;
+                document.getElementById('privateKey').innerHTML = privateKey;
+            }, 2000)
+            // console.log("hi there")
+            // console.log(setPublicKey);
+        }
+
+        // Encryption 
+        function Encryption() {
+            var entropy = 'Testing of RSA algorithm in javascript.';
+            var crypt = new Crypt({
+                rsaStandard: 'RSA-OAEP',
+                entropy: entropy
+            });
+            var rsa = new RSA({
+                entropy: entropy
+            });
+            // var message = 'Hello, this is the demo of encryption/decryption in javascript!';
+            if (message !== null) {
+                encrypted = crypt.encrypt(publicKey, message);
+
+                setTimeout(() => {
+                    document.getElementById('encryptedData').innerHTML = encrypted;
+                }, 2000)
+            } else {
+                alert('There is no message!');
+            }
+
+
+
+
+        }
+        //setTimeout(() => {
+        //    Encryption();
+        //}, 3000);
+
+        // Decryption 
+        function Decryption() {
+            var entropy = 'Testing of RSA algorithm in javascript.';
+            var crypt = new Crypt({
+                rsaStandard: 'RSA-OAEP',
+                entropy: entropy
+            });
+            var rsa = new RSA({
+                entropy: entropy
+            });
+            decrypted = crypt.decrypt(privateKey, encrypted);
+            // console.log('decrypted', decrypted);
+            setTimeout(() => {
+                document.getElementById('decryptedData').innerHTML = decrypted.message;
+                console.log(decrypted);
+            }, 2000);
+        }
+        // setTimeout(() => {
+        //     Decryption();
+        // }, 3000);
+
+    </script>
+</body>
+
+</html>
